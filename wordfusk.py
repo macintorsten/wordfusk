@@ -68,21 +68,38 @@ def word(plan, move):
         w += plan[x][y]
     return w
 
-def print_move(move, plan):
-    size=len(plan[0])
-    print("+-" + size * 2 * "-" + "+")
-    for x, row in enumerate(plan):
-        print("| ", end='')
-        for y, letter in enumerate(row):
-            if (x, y) in move:
-                if move[0] == (x,y):
-                    print(color.RED + color.BOLD + letter + color.END + " ", end='')
-                else:
-                    print(color.CYAN + letter + color.END + " ", end='')
+def print_row(plan, move, rownumber):
+    wl = len(move)
+
+    for wordindex in range(wl):
+        print('| ', end='')
+        for x, a in enumerate(plan[rownumber]):
+            if (rownumber, x) == move[wordindex]:
+                print(color.RED + a + color.END + ' ', end='')
+            elif (rownumber, x) in move[wordindex:]:
+                print(color.DARKCYAN + a + color.END + ' ', end='')
+            elif (rownumber, x) in move[:wordindex]:
+                print(color.DARKCYAN + a + color.END + ' ', end='')
             else:
-                print(letter + " ", end='')
-        print("|")
-    print("+-" + size * 2 * "-" + "+")
+                print(a + ' ', end='')
+        print('| ', end='')
+    print()
+
+def print_move(move, plan, compact=True):
+    size=len(plan[0])
+    wl = len(move)
+
+    for _ in range(wl):
+        print("+-" + size * 2 * "-" + "+ ", end='')
+    print()
+
+    for rownumber in range(len(plan)):
+        print_row(plan, move, rownumber)
+
+    for _ in range(wl):
+        print("+-" + size * 2 * "-" + "+ ", end='')
+
+    print()
 
 def print_plan(plan):
     print_move([], plan)
@@ -122,7 +139,7 @@ def main():
     print("Ange spelplan (4 bokstäver per rad):")
     plan = read_plan()
     wl = WORDLIST
-    minlength=6
+    minlength=5
     for x in range(4):
         for y in range(4):
             moves = [(x,y)]
