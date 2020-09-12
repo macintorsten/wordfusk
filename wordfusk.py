@@ -93,9 +93,6 @@ def dead_end(potential_word, wordlist):
     return not wordlist[index].startswith(potential_word)
 
 def find_moar(plan, moves, wl, minlength=1):
-    if len(moves[0]) > 10:
-        return
-
     for mov in extend_moves(moves):
         potential_word = word(plan, mov)
         if potential_word in wl and potential_word not in FOUND:
